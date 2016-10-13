@@ -34,8 +34,26 @@
     containerLayer.shadowOpacity = 1.f;
     
     // use the image's layer to mask the image into a circle
-    image.layer.cornerRadius = roundf(image.frame.size.width/2.0);
-    image.layer.masksToBounds = YES;
+    //image.layer.cornerRadius = roundf(image.frame.size.width/2.0);
+    //image.layer.masksToBounds = YES;
+    
+    
+    UIBezierPath *aPath = [UIBezierPath bezierPath];
+    // Set the starting point of the shape.
+    [aPath moveToPoint:CGPointMake(215.0, 75.0)];
+    // Draw the lines.
+    [aPath addLineToPoint:CGPointMake(20.0, 230.0)];
+    [aPath addLineToPoint:CGPointMake(215.0, 280.0)];
+    [aPath addLineToPoint:CGPointMake(60.0, 115.0)];
+    [aPath addLineToPoint:CGPointMake(80.0, 310.0)];
+    [aPath addLineToPoint:CGPointMake(300.0, 150.0)];
+    //[aPath addLineToPoint:CGPointMake(85.0, 435.0)];
+    [aPath closePath];
+    
+    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bar.png"]];
+    image.frame = CGRectMake(0, 0, 350, 350);
+    [self setClippingPath:aPath :image];
+    //[self.view addSubview:image];
     
     // add masked image layer into container layer so that it's shadowed
     [containerLayer addSublayer:image.layer];
@@ -57,6 +75,14 @@
     } else {
         return YES;
     }
+}
+
+- (void) setClippingPath:(UIBezierPath *)clippingPath : (UIImageView *)imgView;
+{
+    if (![[imgView layer] mask])
+        [[imgView layer] setMask:[CAShapeLayer layer]];
+    
+    [(CAShapeLayer*) [[imgView layer] mask] setPath:[clippingPath CGPath]];
 }
 
 @end
